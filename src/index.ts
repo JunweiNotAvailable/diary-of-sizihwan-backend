@@ -5,6 +5,7 @@ import chatRoutes from './routes/chat';
 import dataRoutes from './routes/data';
 import authRoutes from './routes/auth';
 import imageRoutes from './routes/image';
+import translateRoutes from './routes/translate';
 
 // Load environment variables
 dotenv.config();
@@ -23,6 +24,7 @@ app.use('/chat', chatRoutes);
 app.use('/data', dataRoutes);
 app.use('/auth', authRoutes);
 app.use('/image', imageRoutes);
+app.use('/translate', translateRoutes);
 
 // Health check route
 app.get('/', (req, res) => {
@@ -42,4 +44,5 @@ app.listen(port as number, '0.0.0.0', () => {
   console.log('- POST /auth/verify: Verify user credentials');
   console.log('- POST /auth/hash-password: Helper to hash passwords');
   console.log('- POST /image: OCR processing with AI');
+  console.log('- POST /translate: Translate text');
 }); 
