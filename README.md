@@ -19,6 +19,7 @@ src/
 └── routes/
     ├── chat.ts    # Chat route with OpenAI integration
     └── data.ts    # Data routes for CRUD operations
+    ...
 ```
 
 ## Environment Variables
@@ -88,3 +89,10 @@ All API endpoints return error responses in the following format:
   "error": "Error message"
 }
 ``` 
+
+Env:
+PORT=3000
+NODE_ENV=development
+OPENAI_API_KEY=YOUR_OPENAI_API_KEY
+DATABASE_URL=YOUR_DATABASE_URL 
+GOOGLE_TRANSLATE_API_KEY=YOUR_GOOGLE_API_KEY
