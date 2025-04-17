@@ -6,6 +6,7 @@ import dataRoutes from './routes/data';
 import authRoutes from './routes/auth';
 import imageRoutes from './routes/image';
 import translateRoutes from './routes/translate';
+import storageRoutes from './routes/storage';
 
 // Load environment variables
 dotenv.config();
@@ -25,6 +26,7 @@ app.use('/data', dataRoutes);
 app.use('/auth', authRoutes);
 app.use('/image', imageRoutes);
 app.use('/translate', translateRoutes);
+app.use('/storage', storageRoutes);
 
 // Health check route
 app.get('/', (req, res) => {
@@ -45,4 +47,6 @@ app.listen(port as number, '0.0.0.0', () => {
   console.log('- POST /auth/hash-password: Helper to hash passwords');
   console.log('- POST /image: OCR processing with AI');
   console.log('- POST /translate: Translate text');
+  console.log('- POST /storage/upload: Upload files to S3');
+  console.log('- DELETE /storage: Delete files from S3');
 }); 

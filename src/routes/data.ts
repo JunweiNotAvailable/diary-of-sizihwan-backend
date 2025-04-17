@@ -44,7 +44,7 @@ const buildWhereClause = (params: QueryParams): { clause: string, values: any[] 
 // GET /data - Get data (with optional filters)
 router.get('/', async (req: Request, res: Response) => {
   try {
-    const { table, id, query: queryString, limit = 50, offset = 0 } = req.query;
+    const { table, id, query: queryString, limit = 50, offset = 0, sortBy, order } = req.query;
     
     if (!table) {
       return res.status(400).json({
@@ -96,11 +96,21 @@ router.get('/', async (req: Request, res: Response) => {
     const limitVal = parseInt(String(limit));
     const offsetVal = parseInt(String(offset));
     
+    // Build the ORDER BY clause
+    let orderByClause = 'ORDER BY id';
+    if (sortBy) {
+      const sortColumn = String(sortBy);
+      const sortOrder = order ? String(order).toUpperCase() : 'ASC';
+      // Only allow ASC or DESC for the order parameter
+      const validOrder = ['ASC', 'DESC'].includes(sortOrder) ? sortOrder : 'ASC';
+      orderByClause = `ORDER BY ${sortColumn} ${validOrder}`;
+    }
+    
     // Get data with pagination
     const queryText = `
       SELECT * FROM ${tableName} 
       ${whereClause} 
-      ORDER BY id 
+      ${orderByClause} 
       LIMIT ${limitVal} OFFSET ${offsetVal}
     `;
     
