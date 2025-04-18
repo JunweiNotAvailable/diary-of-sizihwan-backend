@@ -6,7 +6,7 @@ const router = Router();
 // POST /translate - Translate text
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const { text, targetLang, sourceLang } = req.body;
+    const { text, targetLang } = req.body;
 
     const response = await fetch(
       `https://translation.googleapis.com/language/translate/v2?key=${process.env.GOOGLE_TRANSLATE_API_KEY}`,
@@ -17,8 +17,7 @@ router.post('/', async (req: Request, res: Response) => {
         },
         body: JSON.stringify({
           q: text,
-          source: sourceLang || "auto",      // "auto" = detect automatically
-          target: targetLang,      // e.g., "zh-TW", "ja", "es"
+          target: targetLang,
           format: "text",
         }),
       }

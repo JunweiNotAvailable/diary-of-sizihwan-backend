@@ -138,7 +138,7 @@ router.post('/store', async (req: Request, res: Response) => {
 // POST /qdrant/search - Search for similar embeddings
 router.post('/search', async (req: Request, res: Response) => {
   try {
-    const { vector, limit = 20, filter = { allow_reference: true } } = req.body as SearchRequest;
+    const { vector, limit = 20, filter } = req.body as SearchRequest;
     
     if (!vector || !Array.isArray(vector)) {
       return res.status(400).json({
@@ -155,9 +155,29 @@ router.post('/search', async (req: Request, res: Response) => {
       with_vector: false  // Don't need vectors returned
     };
 
-    // Add filter if provided
-    if (filter) {
-      searchParams.filter = filter;
+    // Add default filter to only include vectors where allow_reference is true
+    searchParams.filter = {
+      must: [
+        {
+          key: "allow_reference",
+          match: {
+            value: true
+          }
+        }
+      ]
+    };
+
+    // Add custom filter if provided
+    if (filter && Object.keys(filter).length > 0) {
+      // Replace the default filter with custom one
+      searchParams.filter = {
+        must: Object.entries(filter).map(([key, value]) => ({
+          key,
+          match: {
+            value
+          }
+        }))
+      };
     }
 
     // Search for similar embeddings

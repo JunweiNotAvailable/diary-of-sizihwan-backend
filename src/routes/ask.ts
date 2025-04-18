@@ -14,15 +14,15 @@ const openai = new OpenAI({ apiKey: apiKey });
 
 // Chat request interface
 interface ChatRequest {
+  systemPrompt: string;
   message: string;
-  stream?: boolean;
 }
 
 // POST /chat - Process chat request
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const { message, stream = false } = req.body as ChatRequest;
-    
+    const { systemPrompt, message } = req.body as ChatRequest;
+
     if (!message) {
       return res.status(400).json({
         success: false,
@@ -32,32 +32,9 @@ router.post('/', async (req: Request, res: Response) => {
 
     const model = 'gpt-4o-mini';
 
-    if (stream) {
-      res.setHeader('Content-Type', 'text/event-stream');
-      res.setHeader('Cache-Control', 'no-cache');
-      res.setHeader('Connection', 'keep-alive');
-
-      const stream = await openai.chat.completions.create({
-        model,
-        messages: [{ role: 'user', content: message }],
-        stream: true,
-      });
-
-      for await (const chunk of stream) {
-        const content = chunk.choices[0]?.delta?.content || '';
-        if (content) {
-          res.write(`data: ${JSON.stringify({ content })}\n\n`);
-        }
-      }
-
-      res.write('data: [DONE]\n\n');
-      res.end();
-      return;
-    }
-
     const completion = await openai.chat.completions.create({
       model,
-      messages: [{ role: 'user', content: message }],
+      messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: message }],
     });
 
     const response = completion.choices[0]?.message?.content || '';
