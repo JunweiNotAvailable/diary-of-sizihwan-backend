@@ -1,14 +1,14 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import askRoutes from './routes/ask';
-import dataRoutes from './routes/data';
-import authRoutes from './routes/auth';
-import imageRoutes from './routes/image';
-import translateRoutes from './routes/translate';
-import storageRoutes from './routes/storage';
-import embeddingRoutes from './routes/embedding'; 
-import qdrantRoutes from './routes/qdrant';
+import askRoutes from './routes/ask.js';
+import dataRoutes from './routes/data.js';
+import authRoutes from './routes/auth.js';
+import imageRoutes from './routes/image.js';
+import translateRoutes from './routes/translate.js';
+import storageRoutes from './routes/storage.js';
+import embeddingRoutes from './routes/embedding.js'; 
+import qdrantRoutes from './routes/qdrant.js';
 
 // Load environment variables
 dotenv.config();
