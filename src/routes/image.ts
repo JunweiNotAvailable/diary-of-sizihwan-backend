@@ -16,12 +16,13 @@ const openai = new OpenAI({ apiKey: apiKey });
 interface ImageOcrRequest {
   imageUrl: string;
   prompt?: string;
+  school: string;
 }
 
 // POST /image - Process image for OCR
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const { imageUrl } = req.body as ImageOcrRequest;
+    const { imageUrl, school } = req.body as ImageOcrRequest;
 
     if (!imageUrl) {
       return res.status(400).json({
@@ -40,7 +41,7 @@ router.post('/', async (req: Request, res: Response) => {
         {
           role: "user",
           content: [
-            { type: "text", text: "Get the student's name and ID from the image in JSON format: {\"name\": <name>, \"id\": <id>}" },
+            { type: "text", text: `Get the student's name and ID from the image and check if the card is valid(The school name ${school} must be on the card), return the result in JSON format: {\"name\": <name>, \"id\": <id>, \"isValid\": <boolean>}` },
             {
               type: "image_url",
               image_url: {
