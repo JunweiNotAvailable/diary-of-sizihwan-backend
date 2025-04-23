@@ -231,34 +231,67 @@ router.put('/', async (req: Request, res: Response) => {
 // DELETE /data - Delete data
 router.delete('/', async (req: Request, res: Response) => {
   try {
-    const { table, id } = req.query;
+    const { table, id, query: queryString } = req.query;
     
-    if (!table || !id) {
+    if (!table) {
       return res.status(400).json({
         success: false,
-        error: 'Table and ID parameters are required'
+        error: 'Table parameter is required'
       } as ApiResponse<null>);
     }
 
     // Use the table name as provided
     const tableName = String(table);
 
-    const result = await query(
-      `DELETE FROM ${tableName} WHERE id = $1 RETURNING *`,
-      [id]
-    );
-    
-    if (result.rows.length === 0) {
-      return res.status(404).json({
+    // If ID is provided, delete single item
+    if (id) {
+      const result = await query(
+        `DELETE FROM ${tableName} WHERE id = $1 RETURNING *`,
+        [id]
+      );
+      
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          error: 'Item not found'
+        } as ApiResponse<null>);
+      }
+      
+      return res.json({
+        success: true,
+        data: result.rows[0]
+      } as ApiResponse<any>);
+    } 
+    // If query is provided, delete items matching query
+    else if (queryString) {
+      // Parse the query string and build the WHERE clause
+      const parsedQuery = parseQueryString(String(queryString));
+      const { clause, values } = buildWhereClause(parsedQuery);
+      
+      if (!clause) {
+        return res.status(400).json({
+          success: false,
+          error: 'Valid query parameter is required for bulk delete'
+        } as ApiResponse<null>);
+      }
+      
+      // Execute delete with query parameters
+      const result = await query(
+        `DELETE FROM ${tableName} ${clause} RETURNING *`,
+        values
+      );
+      
+      return res.json({
+        success: true,
+        data: result.rows,
+        count: result.rowCount
+      } as ApiResponse<any[]>);
+    } else {
+      return res.status(400).json({
         success: false,
-        error: 'Item not found'
+        error: 'Either ID or query parameter is required for delete operation'
       } as ApiResponse<null>);
     }
-    
-    return res.json({
-      success: true,
-      data: result.rows[0]
-    } as ApiResponse<any>);
 
   } catch (error: any) {
     console.error('Error in deleteData:', error);
