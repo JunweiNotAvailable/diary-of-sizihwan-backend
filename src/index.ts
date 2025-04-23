@@ -9,6 +9,7 @@ import translateRoutes from './routes/translate.js';
 import storageRoutes from './routes/storage.js';
 import embeddingRoutes from './routes/embedding.js'; 
 import qdrantRoutes from './routes/qdrant.js';
+import emailRoutes from './routes/email.js';
 
 // Load environment variables
 dotenv.config();
@@ -37,6 +38,7 @@ app.use('/translate', translateRoutes);
 app.use('/storage', storageRoutes);
 app.use('/embedding', embeddingRoutes);
 app.use('/qdrant', qdrantRoutes);
+app.use('/email', emailRoutes);
 
 // Health check route
 app.get('/', (req, res) => {
@@ -63,4 +65,5 @@ app.listen(port as number, '0.0.0.0', () => {
   console.log('- POST /qdrant/store: Store embedding in vector database');
   console.log('- POST /qdrant/search: Search for similar embeddings with scores');
   console.log('- DELETE /qdrant/:id: Delete an embedding');
+  console.log('- POST /email: Send email');
 }); 
