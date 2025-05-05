@@ -39,7 +39,10 @@ router.post('/', async (req: Request, res: Response) => {
       response_format: isJson ? { type: 'json_object' } : undefined
     });
 
-    const response = completion.choices[0]?.message?.content || '';
+    let response = completion.choices[0]?.message?.content || '';
+    if (isJson) {
+      response = JSON.parse(response);
+    }
 
     return res.json({
       success: true,
