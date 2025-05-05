@@ -16,12 +16,13 @@ const openai = new OpenAI({ apiKey: apiKey });
 interface ChatRequest {
   systemPrompt: string;
   message: string;
+  isJson?: boolean;
 }
 
-// POST /chat - Process chat request
+// POST /ask - Process chat request
 router.post('/', async (req: Request, res: Response) => {
   try {
-    const { systemPrompt, message } = req.body as ChatRequest;
+    const { systemPrompt, message, isJson } = req.body as ChatRequest;
 
     if (!message) {
       return res.status(400).json({
@@ -35,6 +36,7 @@ router.post('/', async (req: Request, res: Response) => {
     const completion = await openai.chat.completions.create({
       model,
       messages: [{ role: 'system', content: systemPrompt }, { role: 'user', content: message }],
+      response_format: isJson ? { type: 'json_object' } : undefined
     });
 
     const response = completion.choices[0]?.message?.content || '';
