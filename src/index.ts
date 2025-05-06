@@ -1,15 +1,15 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import askRoutes from './routes/ask.js';
-import dataRoutes from './routes/data.js';
-import authRoutes from './routes/auth.js';
-import imageRoutes from './routes/image.js';
-import translateRoutes from './routes/translate.js';
-import storageRoutes from './routes/storage.js';
-import embeddingRoutes from './routes/embedding.js'; 
-import qdrantRoutes from './routes/qdrant.js';
-import emailRoutes from './routes/email.js';
+import askRoutes from './routes/ask';
+import dataRoutes from './routes/data';
+import authRoutes from './routes/auth';
+import imageRoutes from './routes/image';
+import translateRoutes from './routes/translate';
+import storageRoutes from './routes/storage';
+import embeddingRoutes from './routes/embedding'; 
+import qdrantRoutes from './routes/qdrant';
+import emailRoutes from './routes/email';
 
 // Load environment variables
 dotenv.config();
@@ -57,6 +57,8 @@ app.listen(port as number, '0.0.0.0', () => {
   console.log('- GET|POST|PUT|DELETE /data: CRUD operations with database');
   console.log('- POST /auth/verify: Verify user credentials');
   console.log('- POST /auth/hash-password: Helper to hash passwords');
+  console.log('- POST /auth/send-code: Send verification code via email');
+  console.log('- POST /auth/verify-code: Verify email verification code');
   console.log('- POST /image: OCR processing with AI');
   console.log('- POST /translate: Translate text');
   console.log('- POST /storage/upload: Upload files to S3');
