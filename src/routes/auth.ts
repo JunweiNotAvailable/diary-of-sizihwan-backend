@@ -114,7 +114,7 @@ const generateVerificationCode = (): string => {
 // POST /auth/send-code - Generate and send verification code
 router.post('/send-code', async (req: Request, res: Response) => {
   try {
-    const { email, language } = req.body as { email: string, language: string };
+    const { email, name, language } = req.body as { email: string, name: string, language: string };
     
     // Validate email
     if (!email) {
@@ -153,21 +153,17 @@ router.post('/send-code', async (req: Request, res: Response) => {
     const emailData = {
       from: defaultFromEmail,
       to: email,
-      subject: language === 'zh' ? '驗證碼' : 'Verification Code',
+      subject: language === 'zh' ? '驗證你的學校信箱 - 西灣日記' : 'Verify your school email - Diary of Sizihwan',
       html: `
 <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; background: white; padding: 24px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
   <!-- Header -->
   <div style="text-align: center; margin-bottom: 24px;">
-    <h1 style="font-size: 24px; font-weight: bold; color: #333;">${language === 'zh' ? '驗證碼' : 'Verification Code'}</h1>
+    <h1 style="font-size: 24px; font-weight: bold; color: #333;">${language === 'zh' ? '驗證你的學校信箱' : 'Verify your school email'}</h1>
   </div>
 
   <div style="margin-bottom: 24px;">
-    <p style="color: #555; margin-bottom: 16px;">Hello,</p>
-    <p style="color: #555;">${language === 'zh' ? '請使用以下驗證碼完成您的登入:' : 'Please use the following verification code to complete your login:'}</p>
-  </div>
-
-  <div style="background: #f7f7f7; border-radius: 4px; padding: 24px; margin-bottom: 24px; text-align: center;">
-    <p style="font-size: 36px; font-family: monospace; font-weight: bold; color:rgb(241, 144, 46);">${verificationCode}</p>
+    <p style="color: #555; margin-bottom: 16px;">Hello ${name},</p>
+    <p style="color: #555;">${language === 'zh' ? '請使用以下驗證碼完成您的登入:' : 'Please use the following verification code to complete your login:'} <strong style="font-size: 20px;">${verificationCode}</strong></p>
   </div>
 
   <div style="margin-bottom: 24px;">
