@@ -169,7 +169,6 @@ router.post('/send-code', async (req: Request, res: Response) => {
   <div style="margin-bottom: 24px;">
     <p style="color: #555; margin-bottom: 8px;">${language === 'zh' ? '此驗證碼將在 <strong>10 分鐘</strong> 後過期。' : 'This verification code will expire in <strong>10 minutes</strong>.'}</p>
     <p style="color: #555; margin-bottom: 16px;">${language === 'zh' ? '如果您未要求此驗證碼，可以安全地忽略此電子郵件。' : 'If you did not request this verification code, you can safely ignore this email.'}</p>
-    <p style="color: #555;">${language === 'zh' ? '為了安全起見，請勿將此驗證碼分享給任何人。' : 'For your security, please do not share this verification code with anyone.'}</p>
   </div>
 
   <div style="border-top: 1px solid #eaeaea; margin: 24px 0;"></div>
