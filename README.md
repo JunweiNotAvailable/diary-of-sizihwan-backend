@@ -54,8 +54,8 @@ A Node.js Express backend server that provides various API endpoints for data ma
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/askhisyam-server.git
-   cd askhisyam-server
+   git clone https://github.com/yourusername/diary-of-sizihwan-backend.git
+   cd diary-of-sizihwan-backend
    ```
 
 2. Install dependencies:
