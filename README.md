@@ -1,98 +1,118 @@
-# Simple TypeScript Node.js Server
+# Diary of Sizihwan Server
 
-A streamlined Node.js server built with TypeScript, featuring routes for chat with OpenAI and CRUD operations with PostgreSQL.
+A Node.js Express backend server that provides various API endpoints for data management, authentication, AI interactions, and more.
 
 ## Features
 
-- **Chat API**: Communicate with OpenAI's gpt-4o-mini model
-  - Supports both streaming and non-streaming responses
-- **Data API**: Perform CRUD operations on the database
-  - Flexible querying with filtering, pagination, and ordering
-  - Works with any existing PostgreSQL tables
+- RESTful API endpoints for CRUD operations
+- Authentication and user management
+- AI-powered question answering
+- Image processing with OCR capabilities
+- Translation services
+- File storage with S3 integration
+- Vector database integration with Qdrant
+- Email functionality
 
-## Project Structure
+## Tech Stack
 
-```
-src/
-├── index.ts       # Main server file
-├── db.ts          # Database connection and utilities
-└── routes/
-    ├── chat.ts    # Chat route with OpenAI integration
-    └── data.ts    # Data routes for CRUD operations
-    ...
-```
-
-## Environment Variables
-
-Create a `.env` file in the root directory with the following variables:
-
-```
-PORT=3000
-NODE_ENV=development
-OPENAI_API_KEY=your_openai_api_key
-DATABASE_URL=postgres://username:password@localhost:5432/database_name
-```
-
-## Installation
-
-```bash
-# Install dependencies
-npm install
-
-# Build the project
-npm run build
-
-# Start the server
-npm start
-
-# Start in development mode (with auto-reload)
-npm run dev
-```
+- **Backend**: Node.js with Express
+- **Database**: PostgreSQL (via Neon serverless)
+- **Vector Database**: Qdrant
+- **Storage**: AWS S3
+- **Deployment**: Railway
 
 ## API Endpoints
 
-### Chat API
+- `GET /`: Health check
+- `POST /ask`: Ask questions with AI
+- `GET|POST|PUT|DELETE /data`: CRUD operations with database
+- `POST /auth/verify`: Verify user credentials
+- `POST /auth/hash-password`: Helper to hash passwords
+- `POST /auth/send-code`: Send verification code via email
+- `POST /auth/verify-code`: Verify email verification code
+- `POST /image`: OCR processing with AI
+- `POST /translate`: Translate text
+- `POST /storage/upload`: Upload files to S3
+- `DELETE /storage`: Delete files from S3
+- `POST /embedding`: Embed text
+- `POST /qdrant/store`: Store embedding in vector database
+- `POST /qdrant/search`: Search for similar embeddings with scores
+- `DELETE /qdrant/:id`: Delete an embedding
+- `POST /email`: Send email
 
-- **POST /chat**
-  - Request body:
-    ```json
-    {
-      "message": "Your message to OpenAI",
-      "stream": false  // Optional: Set to true for streaming response
-    }
-    ```
+## Getting Started
 
-### Data API
+### Prerequisites
 
-- **GET /data?table=users&id=1**
-  - Get a single item by ID
-- **GET /data?table=users&query=name:John,email:john@example.com&limit=10&offset=0**
-  - Get data with filters and pagination
-- **POST /data?table=users**
-  - Create a new item
-- **PUT /data?table=users&id=1**
-  - Update an existing item
-- **DELETE /data?table=users&id=1**
-  - Delete an item
+- Node.js (v14 or higher)
+- npm or yarn
+- PostgreSQL database (or Neon serverless account)
+- AWS S3 account (for file storage)
+- Qdrant instance (for vector database)
 
-## Important Note
+### Installation
 
-This server assumes that the database tables already exist and does not create or define them. You must set up your database schema separately before using the API.
+1. Clone the repository:
+   ```
+   git clone https://github.com/yourusername/askhisyam-server.git
+   cd askhisyam-server
+   ```
 
-## Error Handling
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-All API endpoints return error responses in the following format:
+3. Create a `.env` file in the root directory with the following variables:
+   ```
+   PORT=3000
+   NODE_ENV=development
+   DATABASE_URL=your_postgres_connection_string
+   AWS_ACCESS_KEY_ID=your_aws_access_key
+   AWS_SECRET_ACCESS_KEY=your_aws_secret_key
+   AWS_REGION=your_aws_region
+   S3_BUCKET=your_s3_bucket_name
+   QDRANT_URL=your_qdrant_url
+   QDRANT_API_KEY=your_qdrant_api_key
+   EMAIL_SERVICE=your_email_service
+   EMAIL_USER=your_email_user
+   EMAIL_PASS=your_email_password
+   ```
 
-```json
-{
-  "success": false,
-  "error": "Error message"
-}
-``` 
+4. Build the TypeScript code:
+   ```
+   npm run build
+   ```
 
-Env:
-PORT=3000
-NODE_ENV=development
-OPENAI_API_KEY=YOUR_OPENAI_API_KEY
-DATABASE_URL=YOUR_DATABASE_URL 
-GOOGLE_TRANSLATE_API_KEY=YOUR_GOOGLE_API_KEY
+5. Start the server:
+   ```
+   npm start
+   ```
+
+## Development
+
+- Run in development mode with hot reloading:
+  ```
+  npm run dev
+  ```
+
+- Run tests:
+  ```
+  npm test
+  ```
+
+## Deployment
+
+This project is configured for deployment on Railway. The deployment process is automated through Railway's GitHub integration.
+
+## Concurrency and Performance
+
+The server is built on Node.js and Express, which use a non-blocking, event-driven architecture. This allows the server to handle hundreds of concurrent requests without blocking each other. Each request is processed independently through the event loop, and database operations run asynchronously.
+
+## License
+
+[MIT](LICENSE)
+
+## Contact
+
+For any questions or issues, please open an issue in the GitHub repository.
